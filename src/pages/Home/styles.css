@@ -46,11 +46,9 @@
     background: #79ab7f;
     border-radius: 8px;
     text-decoration: none;
-  
     display: flex;
     align-items: center;
     overflow: hidden;
-  
     margin-top: 40px;
   }
   

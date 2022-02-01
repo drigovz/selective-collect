@@ -2,26 +2,28 @@ import React from "react";
 import './styles.css';
 import { FiLogIn } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
-import { Link } from "react-router-dom";
+import Header from "../../Components/Header";
+import Image from "../../Components/Image";
+import CustomLink from "../../Components/Link";
 
 const Home: React.FC = () => {
     return (
         <div id="page-home">
             <div className="content">
-                <header>
-                    <img src={logo} alt="Recycling" title="Recycling" />
-                </header>
+                <Header title="Selective collection and recycling in general">
+                    <Image logo={logo} title="Recycling" alternatedText="Recycling" />
+                </Header>
 
                 <main>
                     <h1>Selective collection and recycling in general</h1>
                     <p>Recycling of various materials, such as paper, plastic, metal, cells and batteries, etc.</p>
 
-                    <Link to="/create-location" title="Recycling">
+                    <CustomLink to="/create-location" title="Recycling">
                         <span>
                             <FiLogIn />
                         </span>
                         <strong>Register a new collection site</strong>
-                    </Link>
+                    </CustomLink>
                 </main>
             </div>
         </div>
