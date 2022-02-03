@@ -1,10 +1,11 @@
 import React from "react";
+import './styles.css';
 import { FiLogIn } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import Header from "../../Components/Header";
 import Image from "../../Components/Image";
 import CustomLink from "../../Components/CustomLink";
- 
+
 const Home: React.FC = () => {
     return (
         <div id="page-home">
