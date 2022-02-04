@@ -1,5 +1,5 @@
 import React from "react";
-import './styles.css';
+import './styles.scss';
 import { FiLogIn } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import Header from "../../Components/Header";
