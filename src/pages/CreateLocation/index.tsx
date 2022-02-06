@@ -3,8 +3,10 @@ import { FiArrowLeft } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import CustomLink from '../../Components/CustomLink';
 import Image from '../../Components/Image';
+import {Map, TileLayer, Marker} from 'react-leaflet';
 import './style.scss';
-
+import List from '../../Components/List';
+    
 const CreateLocation: React.FC = () => {
     return (
         <div id="page-create-location">
@@ -46,6 +48,13 @@ const CreateLocation: React.FC = () => {
                             <h2>Endereço</h2>
                             <span>Marque o endereço no mapa</span>
                         </legend>
+                        <Map center={[-23.0003709,-43.365895]} zoom={14}>
+                            <TileLayer
+                                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={[-23.0003709,-43.365895]} />
+                        </Map>
 
                         <div className="field-group">
                             <div className="field">
@@ -66,13 +75,7 @@ const CreateLocation: React.FC = () => {
                         </legend>
                     </fieldset>
 
-                    <ul className='items-grid'>
-                        <li><img src="http://localhost:3333/uploads/papel.svg" alt="Papel" /></li>
-                        <li className='selected'><img src="http://localhost:3333/uploads/papel.svg" alt="Papel" /></li>
-                        <li><img src="http://localhost:3333/uploads/papel.svg" alt="Papel" /></li>
-                        <li><img src="http://localhost:3333/uploads/papel.svg" alt="Papel" /></li>
-                        <li><img src="http://localhost:3333/uploads/papel.svg" alt="Papel" /></li>
-                    </ul>
+                    <List />
 
                     <button type="submit">
                         Cadastrar local de coleta

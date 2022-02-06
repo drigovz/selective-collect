@@ -31,3 +31,22 @@ h6 {
   color: var(--title-color);
   font-family: Ubuntu;
 }
+  
+#root {
+  height: 100%;
+  background: {
+    image: url("../src/assets/background.svg");
+    size: cover;
+  }
+  padding: {
+    top: 10px;
+    bottom: 10px;
+  }
+
+  &::after,
+  &::before {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
