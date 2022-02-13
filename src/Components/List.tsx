@@ -25,8 +25,6 @@ const List: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
     function handleSelectItem(id: number): void {
-        //setSelectedItems([...selectedItems, id]);
-
         const alreadySelected = selectedItems.findIndex(idOnState => idOnState === id);
         if (alreadySelected >= 0) {
             const filteredItens = selectedItems.filter(item => item !== id);

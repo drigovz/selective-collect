@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import CustomLink from '../../Components/CustomLink';
@@ -7,6 +7,7 @@ import {Map, TileLayer, Marker} from 'react-leaflet';
 import {LeafletMouseEvent} from 'leaflet';
 import './style.scss';
 import List from '../../Components/List';
+import api from '../../services/api';
     
 const CreateLocation: React.FC = () => {
     // Set map marker position
@@ -40,6 +41,28 @@ const CreateLocation: React.FC = () => {
         });
     }
 
+    // send data for back-end
+    async function handleSubmit(event: FormEvent): Promise<void> {
+        event.preventDefault();
+
+        const {city, email, name, uf, whatsapp} = formData;
+        const [latitude, longitude] = selectedPosition;
+        //const items = selectedItems;
+
+        const data  = {
+            city,
+            email,
+            name,
+            uf,
+            whatsapp,
+            latitude,
+            longitude,
+            //items,
+        };
+
+        await api.post('locations', data);
+    }
+
     return (
         <div id="page-create-location">
             <div className="content">
@@ -51,7 +74,7 @@ const CreateLocation: React.FC = () => {
                     </CustomLink>
                 </header>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <h1>Cadastro do <br /> local de coleta</h1>
 
                     <fieldset>
@@ -133,7 +156,7 @@ const CreateLocation: React.FC = () => {
                             <span>Você pode marcar um ou mais ítens</span>
                         </legend>
                     </fieldset>
-
+ 
                     <List />
 
                     <button type="submit">
