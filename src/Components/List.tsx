@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import Image from './Image';
 
 interface Item {
     id: number,
@@ -24,7 +25,7 @@ const List: React.FC = () => {
 
             {items.map(item => (
                 <li key={item.id}>
-                    <img src={item.image_url} alt={item.title} />
+                    <Image logo={item.image_url} alternatedText={item.title} title={item.title} />
                 </li>
             ))}
 
