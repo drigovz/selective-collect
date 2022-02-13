@@ -9,6 +9,9 @@ interface Item {
 }
 
 const List: React.FC = () => {
+    // get itens from back-end
+    const [items, setItems] = useState<Item[]>([]);
+
     useEffect(() => {
         api.get('items').then(response => {
             console.log(response.data);
@@ -18,13 +21,30 @@ const List: React.FC = () => {
         });
     }, []);
 
-    const [items, setItems] = useState<Item[]>([]);
+    // get data from list
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+    function handleSelectItem(id: number): void {
+        //setSelectedItems([...selectedItems, id]);
+
+        const alreadySelected = selectedItems.findIndex(idOnState => idOnState === id);
+        if (alreadySelected >= 0) {
+            const filteredItens = selectedItems.filter(item => item !== id);
+            setSelectedItems(filteredItens);
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
+    }
 
     return (
         <ul className='items-grid'>
 
             {items.map(item => (
-                <li key={item.id}>
+                <li
+                    key={item.id}
+                    onClick={() => handleSelectItem(item.id)}
+                    className={selectedItems.includes(item.id) ? 'selected' : ''}
+                >
                     <Image logo={item.image_url} alternatedText={item.title} title={item.title} />
                 </li>
             ))}
