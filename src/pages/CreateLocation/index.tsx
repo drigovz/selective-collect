@@ -1,26 +1,26 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import CustomLink from '../../Components/CustomLink';
 import Image from '../../Components/Image';
-import {Map, TileLayer, Marker} from 'react-leaflet';
-import {LeafletMouseEvent} from 'leaflet';
+import { Map, TileLayer, Marker } from 'react-leaflet';
+import { LeafletMouseEvent } from 'leaflet';
 import './style.scss';
 import List from '../../Components/List';
 import api from '../../services/api';
-    
+
 const CreateLocation: React.FC = () => {
     // Set map marker position
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
 
-    function handleClickMap(event: LeafletMouseEvent): void {
+    const handleClickMap = useCallback((event: LeafletMouseEvent): void => {
         console.log(event);
 
         setSelectedPosition([
-            event.latlng.lat, 
+            event.latlng.lat,
             event.latlng.lng
         ]);
-    }
+    }, []);
 
     // input data from form
     const [formData, setFormData] = useState({
@@ -31,25 +31,25 @@ const CreateLocation: React.FC = () => {
         uf: '',
     });
 
-    function handleInputChange (event: ChangeEvent<HTMLInputElement>): void {
+    const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
         console.log(event.target.name, event.target.value);
-        
-        const {name, value} = event.target;
+
+        const { name, value } = event.target;
         setFormData({
             ...formData,
             [name]: value,
         });
-    }
+    }, [formData]);
 
     // send data for back-end
-    async function handleSubmit(event: FormEvent): Promise<void> {
+    const handleSubmit = useCallback(async (event: FormEvent): Promise<void> => {
         event.preventDefault();
 
-        const {city, email, name, uf, whatsapp} = formData;
+        const { city, email, name, uf, whatsapp } = formData;
         const [latitude, longitude] = selectedPosition;
-        //const items = selectedItems;
+        // const items = this.setSelectedItems;
 
-        const data  = {
+        const data = {
             city,
             email,
             name,
@@ -61,7 +61,7 @@ const CreateLocation: React.FC = () => {
         };
 
         await api.post('locations', data);
-    }
+    }, [formData, selectedPosition]);
 
     return (
         <div id="page-create-location">
@@ -84,30 +84,30 @@ const CreateLocation: React.FC = () => {
 
                         <div className="field">
                             <label htmlFor="name">Nome da entidade</label>
-                            <input 
-                                type="text" 
-                                name="name" 
-                                id="name" 
-                                onChange={handleInputChange} 
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className="field-group">
                             <div className="field">
                                 <label htmlFor="email">E-mail</label>
-                                <input 
-                                    type="email" 
-                                    name="email" 
-                                    id="email" 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div className="field">
                                 <label htmlFor="whatsapp">Whatsapp</label>
-                                <input 
-                                    type="text" 
-                                    name="whatsapp" 
-                                    id="whatsapp" 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="text"
+                                    name="whatsapp"
+                                    id="whatsapp"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                         </div>
@@ -118,33 +118,33 @@ const CreateLocation: React.FC = () => {
                             <h2>Endereço</h2>
                             <span>Marque o endereço no mapa</span>
                         </legend>
-                        <Map center={[-23.0003709,-43.365895]} zoom={14}
+                        <Map center={[-23.0003709, -43.365895]} zoom={14}
                             onclick={handleClickMap}
                             onChange={handleInputChange} >
-                                <TileLayer
-                                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                />
-                                <Marker position={selectedPosition} />
+                            <TileLayer
+                                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={selectedPosition} />
                         </Map>
 
                         <div className="field-group">
                             <div className="field">
                                 <label htmlFor="city">Cidade</label>
-                                <input 
-                                    type="text" 
-                                    name="city" 
-                                    id="city" 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="text"
+                                    name="city"
+                                    id="city"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div className="field">
                                 <label htmlFor="uf">Estado</label>
-                                <input 
-                                    type="text" 
-                                    name="uf" 
-                                    id="uf" 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="text"
+                                    name="uf"
+                                    id="uf"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                         </div>
@@ -156,7 +156,7 @@ const CreateLocation: React.FC = () => {
                             <span>Você pode marcar um ou mais ítens</span>
                         </legend>
                     </fieldset>
- 
+
                     <List />
 
                     <button type="submit">

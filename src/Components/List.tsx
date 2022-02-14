@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
 import Image from './Image';
 
@@ -24,7 +24,7 @@ const List: React.FC = () => {
     // get data from list
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-    function handleSelectItem(id: number): void {
+    const handleSelectItem = useCallback((id: number): void => {
         const alreadySelected = selectedItems.findIndex(idOnState => idOnState === id);
         if (alreadySelected >= 0) {
             const filteredItens = selectedItems.filter(item => item !== id);
@@ -32,7 +32,7 @@ const List: React.FC = () => {
         } else {
             setSelectedItems([...selectedItems, id]);
         }
-    }
+    }, [setSelectedItems]);
 
     return (
         <ul className='items-grid'>
