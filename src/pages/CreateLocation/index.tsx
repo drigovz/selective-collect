@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import logo from '../../assets/logo.svg';
 import CustomLink from '../../Components/CustomLink';
@@ -6,8 +6,13 @@ import Image from '../../Components/Image';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import './style.scss';
-import List from '../../Components/List';
 import api from '../../services/api';
+
+interface Item {
+    id: number,
+    title: string,
+    image_url: string,
+}
 
 const CreateLocation: React.FC = () => {
     // Set map marker position
@@ -22,6 +27,31 @@ const CreateLocation: React.FC = () => {
         ]);
     }, []);
 
+    // get list itens with images from back-end
+    const [items, setItems] = useState<Item[]>([]);
+
+    useEffect(() => {
+        api.get('items').then(response => {
+            console.log(response.data);
+            setItems(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
+
+    // get data from list
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+    const handleSelectItem = useCallback((id: number): void => {
+        const alreadySelected = selectedItems.findIndex(idOnState => idOnState === id);
+        if (alreadySelected >= 0) {
+            const filteredItens = selectedItems.filter(item => item !== id);
+            setSelectedItems(filteredItens);
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
+    }, [selectedItems]);
+
     // input data from form
     const [formData, setFormData] = useState({
         name: '',
@@ -30,7 +60,7 @@ const CreateLocation: React.FC = () => {
         city: '',
         uf: '',
     });
-
+ 
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
         console.log(event.target.name, event.target.value);
 
@@ -47,7 +77,7 @@ const CreateLocation: React.FC = () => {
 
         const { city, email, name, uf, whatsapp } = formData;
         const [latitude, longitude] = selectedPosition;
-        // const items = this.setSelectedItems;
+        const items = setSelectedItems;
 
         const data = {
             city,
@@ -57,7 +87,7 @@ const CreateLocation: React.FC = () => {
             whatsapp,
             latitude,
             longitude,
-            //items,
+            items,
         };
 
         await api.post('locations', data);
@@ -157,7 +187,19 @@ const CreateLocation: React.FC = () => {
                         </legend>
                     </fieldset>
 
-                    <List />
+                    <ul className='items-grid'>
+
+                        {items.map(item => (
+                            <li
+                                key={item.id}
+                                onClick={() => handleSelectItem(item.id)}
+                                className={selectedItems.includes(item.id) ? 'selected' : ''}
+                            >
+                                <Image logo={item.image_url} alternatedText={item.title} title={item.title} />
+                            </li>
+                        ))}
+
+                    </ul>
 
                     <button type="submit">
                         Cadastrar local de coleta
