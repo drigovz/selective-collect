@@ -7,6 +7,7 @@ import { Map, TileLayer, Marker } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import './style.scss';
 import api from '../../services/api';
+import {useHistory} from 'react-router-dom';
 
 interface Item {
     id: number,
@@ -71,6 +72,8 @@ const CreateLocation: React.FC = () => {
         });
     }, [formData]);
 
+    const history = useHistory();
+
     // send data for back-end
     const handleSubmit = useCallback(async (event: FormEvent): Promise<void> => {
         event.preventDefault();
@@ -90,8 +93,18 @@ const CreateLocation: React.FC = () => {
             items,
         };
 
-        await api.post('locations', data);
-    }, [formData, selectedPosition]);
+        await api.post('locations', data).then(res => {
+            console.log(res.data);
+        }).catch(err => {
+            console.log(err);
+        });
+
+        alert('Location created successfull!');
+
+        // redirect to home page 
+        history.push('/');
+
+    }, [formData, selectedPosition, history]);
 
     return (
         <div id="page-create-location">
